@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
+    <title>facereg</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="assets/css/styles.min.css">
+</head>
+
+<body>
+    <nav class="navbar navbar-light navbar-expand-md py-3">
+        <div class="container"><a class="navbar-brand d-flex align-items-center" href="#"><span class="bs-icon-sm bs-icon-rounded bs-icon-primary d-flex justify-content-center align-items-center me-2 bs-icon"><svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" fill="currentColor" viewBox="0 0 16 16" class="bi bi-bezier">
+                        <path fill-rule="evenodd" d="M0 10.5A1.5 1.5 0 0 1 1.5 9h1A1.5 1.5 0 0 1 4 10.5v1A1.5 1.5 0 0 1 2.5 13h-1A1.5 1.5 0 0 1 0 11.5v-1zm1.5-.5a.5.5 0 0 0-.5.5v1a.5.5 0 0 0 .5.5h1a.5.5 0 0 0 .5-.5v-1a.5.5 0 0 0-.5-.5h-1zm10.5.5A1.5 1.5 0 0 1 13.5 9h1a1.5 1.5 0 0 1 1.5 1.5v1a1.5 1.5 0 0 1-1.5 1.5h-1a1.5 1.5 0 0 1-1.5-1.5v-1zm1.5-.5a.5.5 0 0 0-.5.5v1a.5.5 0 0 0 .5.5h1a.5.5 0 0 0 .5-.5v-1a.5.5 0 0 0-.5-.5h-1zM6 4.5A1.5 1.5 0 0 1 7.5 3h1A1.5 1.5 0 0 1 10 4.5v1A1.5 1.5 0 0 1 8.5 7h-1A1.5 1.5 0 0 1 6 5.5v-1zM7.5 4a.5.5 0 0 0-.5.5v1a.5.5 0 0 0 .5.5h1a.5.5 0 0 0 .5-.5v-1a.5.5 0 0 0-.5-.5h-1z"></path>
+                        <path d="M6 4.5H1.866a1 1 0 1 0 0 1h2.668A6.517 6.517 0 0 0 1.814 9H2.5c.123 0 .244.015.358.043a5.517 5.517 0 0 1 3.185-3.185A1.503 1.503 0 0 1 6 5.5v-1zm3.957 1.358A1.5 1.5 0 0 0 10 5.5v-1h4.134a1 1 0 1 1 0 1h-2.668a6.517 6.517 0 0 1 2.72 3.5H13.5c-.123 0-.243.015-.358.043a5.517 5.517 0 0 0-3.185-3.185z"></path>
+                    </svg></span><span>Face Registration App</span></a><button data-bs-toggle="collapse" class="navbar-toggler" data-bs-target="#navcol-4"><span class="visually-hidden">Toggle navigation</span><span class="navbar-toggler-icon"></span></button>
+            <div class="collapse navbar-collapse flex-grow-0 order-md-first" id="navcol-4">
+                <ul class="navbar-nav me-auto">
+                    <li class="nav-item"><a class="nav-link active" href="index.html">Home</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#">Contact us</a></li>
+                </ul>
+                <div class="d-md-none my-2"><button class="btn btn-light me-2" type="button">Button</button><button class="btn btn-primary" type="button">Button</button></div>
+            </div>
+            <div class="d-none d-md-block"><button class="btn btn-light me-2" type="button">Log in</button><a class="btn btn-primary" role="button" href="#">Sign Up</a></div>
+        </div>
+    </nav>
+    <hr>
+    <div class="container">
+        <div class="row">
+            <div class="col-9 text-center">
+                <video width="560" height="560" autoplay >
+
+                </video>
+                <div class="canvas-container" style="text-align: center">
+                    <canvas id="canvas" width="560" height="560"style="display:None ;" ></canvas>
+
+                </div>
+                <br>
+                <button class="btn btn-primary" id="capture">Capture</button>
+                <button class="btn btn-primary" id="start" onclick="start()">start</button>
+                <button class="btn btn-primary" id="stop" onclick="stop()">stop</button>
+            </div>
+            <div class="faces col-3">
+                
+            </div>
+        </div>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        const video = document.querySelector('video');
+        const captureButton = document.querySelector('#capture');
+        const canvas = document.querySelector('#canvas');
+        const context = canvas.getContext('2d');
+        const startButton = document.querySelector('#start');
+        const stopButton = document.querySelector('#stop');
+        const faces = document.querySelector('.faces');
+
+        stopButton.setAttribute("disabled", true);
+        captureButton.setAttribute("style", "display:None ;");
+
+        const start = () => { 
+            startButton.setAttribute('disabled', true);
+            stopButton.removeAttribute('disabled');
+            captureButton.removeAttribute('style');
+
+            canvas.setAttribute('style', 'display:None ;');
+            
+            const constraints = {
+                video: true
+            };
+            const handleSuccess = (stream) => {
+                video.srcObject = stream;
+            };
+            const handleError = (error) => {
+                console.log('navigator.getUserMedia error: ', error);
+            };
+            captureButton.addEventListener('click', () => {
+                // Draw the video frame to the canvas.
+                context.drawImage(video, 0, 0, canvas.width, canvas.height);
+                video.setAttribute("style", "display:None ;");
+                canvas.setAttribute("style", "display:block ;");
+                captureButton.setAttribute("style", "display:None ;");
+                
+                const uploadBtn = document.createElement('button');
+                const recaptureBtn = document.createElement('button');
+                recaptureBtn.setAttribute('class', 'btn btn-warning');
+                uploadBtn.setAttribute("class", "btn btn-success");
+                uploadBtn.setAttribute("id", "upload");
+                uploadBtn.setAttribute("type", "button");
+                uploadBtn.innerHTML = "Upload";
+                document.querySelector('.canvas-container').appendChild(uploadBtn);
+                recaptureBtn.innerHTML = "Recapture";
+                recaptureBtn.setAttribute("id", "recapture");
+                recaptureBtn.setAttribute("oncilck", "recapture()");
+                
+                recaptureBtn.addEventListener("click" ,function () {
+                    video.setAttribute("style", "display:block ;");
+                    canvas.setAttribute("style", "display:None ;");
+                    uploadBtn.setAttribute("style", "display:None ;");
+                    recaptureBtn.setAttribute("style", "display:None ;");
+                    captureButton.removeAttribute("style");
+                });
+                
+
+                document.querySelector('.canvas-container').appendChild(recaptureBtn);
+                uploadBtn.setAttribute("onclick", "upload()");
+            });
+
+            navigator.mediaDevices.getUserMedia(constraints).then(handleSuccess).catch(handleError);
+            
+        }
+        
+        const stop = () => {
+            // Stop the video streaming
+            
+            video.srcObject.getTracks().forEach(track => track.stop());
+            
+
+        }
+        
+        const upload = () => {
+            url = "http://127.0.0.1:5000/save_image"
+            
+            const dataURL = canvas.toDataURL('image/png');
+            const blobBin = atob(dataURL.split(',')[1]);
+            const array = [];
+            for (let i = 0; i < blobBin.length; i++) {
+                array.push(blobBin.charCodeAt(i));
+            }
+            const file = new Blob([new Uint8Array(array)], { type: 'image/png' });
+            const formData = new FormData();
+            formData.append('file', file);
+            fetch(url, {
+                method: 'POST',
+                body: formData
+            }).then(response => response.json()).then(data => {
+                console.log(data);
+                showTheFaces(data);
+            }).catch(error => {
+                console.error(error);
+            });
+        }
+        const showTheFaces = (data) => {
+            
+            faces.innerHTML = "";
+            data = data.faces;
+            for (let i = 0; i < data.length; i++) {
+                const face = document.createElement('div');
+                face.setAttribute("class", "card");
+                face.setAttribute("style", "margin-top: 5px;");
+                const img = document.createElement('img');
+                img.setAttribute("class", "card-img-top w-100 d-block");
+                img.setAttribute("src", data[i]);
+                face.appendChild(img);
+                const cardBody = document.createElement('div');
+                cardBody.setAttribute("class", "card-body");
+                const h4 = document.createElement('h4');
+                h4.setAttribute("class", "card-title");
+                h4.innerHTML = "Face " + (i + 1);
+                const nameInput = document.createElement('input');
+                nameInput.setAttribute("class", "form-control");
+                nameInput.setAttribute("type", "text");
+                nameInput.setAttribute("placeholder", "Enter Name");
+                nameInput.setAttribute("id", "name" + i);
+                nameInput.setAttribute("name", "name" + i);
+                const button = document.createElement('button');
+                button.setAttribute("class", "btn btn-primary");
+                button.setAttribute("id", "save" + i);
+                button.setAttribute("type", "button");
+                button.setAttribute("onclick", "saveName(this.id)");
+                button.innerText = "Register";
+                cardBody.appendChild(h4);
+                cardBody.appendChild(nameInput);
+                cardBody.appendChild(button);
+                face.appendChild(cardBody);
+                faces.appendChild(face);
+            }
+        }
+        const saveName = (id) => {
+            const name = document.querySelector('#' + id).previousElementSibling.value;
+            const face = document.querySelector('#' + id).parentElement.parentElement;
+            const img = face.querySelector('img').src;
+            const url = "http://127.0.0.1:5000/register";
+            
+            const fd = new FormData();
+            fd.append('name', name);
+            fd.append('image', img);
+
+            fetch(url, {
+                method: 'POST',
+                body: fd
+            }).then(response => response.json()).then(data => {
+                console.log(data);
+                if (data.success) {
+                    document.querySelector('#' + id).innerHTML = "Saved";
+                    document.querySelector('#' + id).setAttribute("disabled", true);
+                }
+            }).catch(error => {
+                console.error(error);
+            });
+        }
+
+    </script>
+</body>
+
+</html>
