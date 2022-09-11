@@ -3,7 +3,9 @@ from flask import Flask, render_template, request, redirect, url_for, flash, jso
 from flask_cors import CORS, cross_origin
 import os
 from PIL import Image
+from local_db import save_face
 from camera import run
+import json
 
 app = Flask(__name__)
 cors = CORS(app)
@@ -42,14 +44,11 @@ def save_image():
 @cross_origin()
 def register():
     if request.method=="POST":
-        img_path = request.form["image"]
-        img_name = request.form['name']
-        print(img_name, img_path)
-        img_local_path = img_path.replace(HOME, "")[1:]
-        if os.path.isfile("static\\saved\\"+img_name+".png"):
-            os.remove("static\\saved\\"+img_name+".png")
-        os.rename(img_local_path, "static\\saved\\"+img_name+".png")
-        return jsonify({"success": True}), 200
+        img_data = request.form
+        t = save_face(img_data)
+        if t  == True:
+            return jsonify({"success": True}), 200
+        return jsonify({"success": False, "resp" : t}), 403
     return jsonify({"success": False}), 400
 
 @app.route("/fetch", methods=["GET"])
@@ -57,17 +56,48 @@ def register():
 def fetch_image():
     """
     Fetch image from static folder and return URLs in JSON
+    No Maximum Cap as of now
     """
     if request.method == "GET":
         path = "static\\saved"
         
         images = os.listdir(path)
+        images.remove("data.json")
         image_urls = []
-        for image in images:
-            
+        for image in images:    
             image_urls.append(HOME + url_for("static", filename="saved/" + image))
-        print(image_urls)
-        return jsonify({"success": True, "images": [ {"name" : images[i] , "url" : image_urls[i]} for i in range(len(images)) ]})
+        with open("static\\saved\\data.json", "r") as f:
+            data = json.load(f)
+        print(data["face"], len(data["face"]))
+        print(image_urls, len(image_urls))
+        if len(data["face"]) != len(image_urls):
+            return jsonify({"success": False}), 504
+        return jsonify({"success": True, "images": [ {"name" : data["face"][i]["person_name"] , "url" : image_urls[i]} for i in range(len(images)) ]})
     return jsonify({"success": False})
+
+
+@app.route("/remove", methods=["GET"])
+@cross_origin()
+def remove_face():
+    if request.method == "GET":
+        face_id = int(request.args.get("face_id"))
+        with open("static\\saved\\data.json", "r") as f:
+            data = json.load(f)
+        temp_data = data.copy()
+        status = 0
+        try:
+            for i in range(len(data["face"])):
+                if data["face"][i]["face_id"] == face_id:
+                    data["face"].pop(i)
+                    status = 1
+                    break
+            with open("static\\saved\\data.json", "w") as f:
+                json.dump(data, f, indent=4)
+            return jsonify({"success": True, "status" : status}), 200
+        except Exception as e:
+            print(e)
+            with open("static\\saved\\data.json", "w") as f:
+                json.dump(temp_data, f, indent=4)
+            return jsonify({"success": False}), 400
 
 app.run()
