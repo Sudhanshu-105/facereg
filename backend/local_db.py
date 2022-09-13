@@ -4,6 +4,7 @@ import json
 HOME = "http://127.0.0.1:5000" 
 
 def save_face(image_data):
+    verify_or_create_folders()
     img_name = image_data["name"]
     img_path = image_data["image"]
     #Further data can be extracted here and added to a dict
@@ -34,7 +35,16 @@ def save_face(image_data):
             json.dump(temp_data, f, indent=4)
         return e.__str__()
     
-
+def verify_or_create_folders():
+    if not os.path.isdir("static\\saved"):
+        os.mkdir("static\\saved")
+    if not os.path.isfile("static\\saved\\data.json"):
+        with open("static\\saved\\data.json", "w") as f:
+            json.dump({"face": []}, f, indent=4)
+    if not os.path.isdir("static\\uploads"):
+        os.mkdir("static\\uploads")
+    if not os.path.isdir("static\\uploads\\comp"):
+        os.mkdir("static\\uploads\\comp")
 def get_id(image_data):
     # Temporary assigned incremental indexing, can be replaced with a hash function
     with open("static\\saved\\data.json", "r") as f:
