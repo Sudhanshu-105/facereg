@@ -26,7 +26,7 @@ def save_face(image_data):
         
         if os.path.isfile("static\\saved\\"+str(img_id)+".png"):
             os.remove("static\\saved\\"+str(img_id)+".png")
-        os.rename(img_local_path, "static\\saved\\"+str(img_id)+".png")
+        # os.rename(img_local_path, "static\\saved\\"+str(img_id)+".png")
         with open("static\\saved\\data.json", "w") as f:
             json.dump(data, f, indent=4)
         return True

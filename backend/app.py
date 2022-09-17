@@ -2,6 +2,7 @@ from flask import Flask, render_template, request, redirect, url_for, flash, jso
 from flask_cors import CORS, cross_origin
 import os
 from PIL import Image
+from local_db import verify_or_create_folders
 from local_db import save_face
 from camera import run
 import json
@@ -29,6 +30,7 @@ def save_image():
     if request.method == 'POST':
 
         # Get image from request as blob
+        verify_or_create_folders()
         image_blob = request.files['file']
         image_name = "doc"
         img = Image.open(image_blob)
