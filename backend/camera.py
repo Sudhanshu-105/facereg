@@ -1,3 +1,4 @@
+from random import randint
 import cv2
 base_folder = "static\\uploads\\comp"
 base_url = "http://127.0.0.1:5000/static/uploads/comp"
@@ -21,7 +22,8 @@ def run(img_path):
     for (x, y, w, h) in detected_faces:
         cv2.rectangle(img, (x, y), (x+w, y+h), (0, 0, 255), 2)
         detected_faces = img[y:y + h, x:x + w]
-        cv2.imwrite(base_folder+'\\face_' + str(idx) + '.png', detected_faces[:])
-        files.append(base_url+'/face_' + str(idx) + '.png')
+        img_id = str(randint(1, 100000))
+        cv2.imwrite(base_folder+'\\face_' + img_id+ '.png', detected_faces[:])
+        files.append(base_url+'/face_' + img_id + '.png')
         idx+=1
     return files

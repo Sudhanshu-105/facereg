@@ -26,11 +26,12 @@ def save_face(image_data):
         
         if os.path.isfile("static\\saved\\"+str(img_id)+".png"):
             os.remove("static\\saved\\"+str(img_id)+".png")
-        # os.rename(img_local_path, "static\\saved\\"+str(img_id)+".png")
+        os.rename(img_local_path, "static\\saved\\"+str(img_id)+".png")
         with open("static\\saved\\data.json", "w") as f:
             json.dump(data, f, indent=4)
         return True
     except Exception as e:
+        print("Could not save face: ", e)
         with open("static\\saved\\data.json", "w") as f:
             json.dump(temp_data, f, indent=4)
         return e.__str__()
@@ -52,3 +53,14 @@ def get_id(image_data):
     if len(data["face"]) == 0:
         return 1
     return data["face"][-1]["face_id"]+1
+
+def flush_database():
+    with open("static\\saved\\data.json", "w") as f:
+        json.dump({"face": []}, f, indent=4)
+    for file in os.listdir("static\\saved"):
+        if file.endswith(".png") or file.endswith(".jpg"):
+            os.remove("static\\saved\\"+file)
+    for file in os.listdir("static\\uploads\\comp"):
+        if file.endswith(".png") or file.endswith(".jpg"):
+            os.remove("static\\uploads\\comp\\"+file)
+    return True

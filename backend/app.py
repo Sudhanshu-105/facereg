@@ -2,6 +2,7 @@ from flask import Flask, render_template, request, redirect, url_for, flash, jso
 from flask_cors import CORS, cross_origin
 import os
 from PIL import Image
+from local_db import flush_database
 from local_db import verify_or_create_folders
 from local_db import save_face
 from camera import run
@@ -69,8 +70,7 @@ def fetch_image():
             image_urls.append(HOME + url_for("static", filename="saved/" + image))
         with open("static\\saved\\data.json", "r") as f:
             data = json.load(f)
-        print(data["face"], len(data["face"]))
-        print(image_urls, len(image_urls))
+        
         if len(data["face"]) != len(image_urls):
             return jsonify({"success": False}), 504
         return jsonify({"success": True, "images": [ {"name" : data["face"][i]["person_name"] , "url" : image_urls[i]} for i in range(len(images)) ]})
@@ -101,4 +101,11 @@ def remove_face():
                 json.dump(temp_data, f, indent=4)
             return jsonify({"success": False}), 400
 
+@app.route("/annihilate", methods=["GET"])
+@cross_origin()
+def flush_db():
+    if request.method == "GET":
+        flush_database()
+        return jsonify({"success": True}), 200
+    return jsonify({"success": False}), 400
 app.run()
