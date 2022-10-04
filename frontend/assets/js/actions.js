@@ -90,6 +90,8 @@ const upload_button_action = function() {
     const file = new Blob([new Uint8Array(array)], { type: 'image/png' });
     const formData = new FormData();
     formData.append('file', file);
+
+    document.querySelector(".loader").removeAttribute("style");
     fetch(url, {
         method: 'POST',
         body: formData
@@ -124,7 +126,12 @@ let enable = (object) => {
 const show_faces = (data) => {
     faces = document.querySelector(".faces")
     faces.innerHTML = "";
+    document.querySelector(".loader").setAttribute("style", "display: none;");
     data = data.faces;
+    if(data.length == 0){
+        faces.innerHTML = "No faces found";
+        return
+    }
     for (let i = 0; i < data.length; i++) {
         const face = document.createElement('div');
         face.setAttribute("class", "card");

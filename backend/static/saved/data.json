@@ -1,3 +1,14 @@
 {
-    "face": []
+    "face": [
+        {
+            "face_id": 1,
+            "person_name": "Uttam",
+            "headshot": "static\\saved\\Uttam.png"
+        },
+        {
+            "face_id": 2,
+            "person_name": "S Dominic",
+            "headshot": "static\\saved\\S Dominic.png"
+        }
+    ]
 }
