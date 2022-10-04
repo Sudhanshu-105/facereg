@@ -1,5 +1,5 @@
 ## Face Recognition and Registration App  
-this application does not label faces.  
+this application does not label faces yet.  
 Backend - Flask  
 FrontEnd - HTML + Bootstrap , Javascript
 
