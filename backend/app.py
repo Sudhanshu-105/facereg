@@ -2,17 +2,16 @@ from flask import Flask, render_template, request, redirect, url_for, flash, jso
 from flask_cors import CORS, cross_origin
 import os
 from PIL import Image
-from local_db import flush_database
-from local_db import verify_or_create_folders
-from local_db import save_face
+from local_db import flush_database, verify_or_create_folders, save_face
 from camera import run
 import json
+from env import HOME
 
 app = Flask(__name__)
 cors = CORS(app)
 app.config["UPLOAD_FOLDER"] = "static\\uploads"
 app.config["CORS_HEADERS"] = "Content-Type"
-HOME = "http://127.0.0.1:5000" 
+
 @app.route('/')
 def main():
     return "Hello Wjorld!"
@@ -73,7 +72,7 @@ def fetch_image():
         
         if len(data["face"]) != len(image_urls):
             return jsonify({"success": False}), 504
-        return jsonify({"success": True, "images": [ {"name" : data["face"][i]["person_name"] , "url" : image_urls[i]} for i in range(len(images)) ]})
+        return jsonify({"success": True, "images": [ {"name" : data["face"][i]["person_name"] ,"face_id":data["face"][i]["face_id"], "url" : image_urls[i]} for i in range(len(images)) ]})
     return jsonify({"success": False})
 
 

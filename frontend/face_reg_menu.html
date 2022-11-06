@@ -86,13 +86,18 @@
                         var col = document.createElement("td");
                         var div = document.createElement("div");
                         var img = document.createElement("img");
-                        var pr = document.createElement("p");
-                        pr.textContent = table[i][j].name;
+                        var pr = document.createElement("span");
+                        var fid = document.createElement("span");
+                        pr.textContent = table[i][j].name
                         img.src = table[i][j].url;
+                        fid.textContent = "Face ID : " + table[i][j].face_id;
                         img.setAttribute("width", "150px");
                         img.setAttribute("height", "150px");
                         div.appendChild(img);
+                        div.appendChild(document.createElement("br"));
                         div.appendChild(pr);
+                        div.appendChild(document.createElement("br"));
+                        div.appendChild(fid);
                         col.appendChild(div);
                         row.appendChild(col);
                     }

@@ -1,8 +1,6 @@
 from random import randint
+from env import base_folder, base_url
 import cv2
-base_folder = "static\\uploads\\comp"
-base_url = "http://127.0.0.1:5000/static/uploads/comp"
-
 
 def run(img_path):
     # Read the input image

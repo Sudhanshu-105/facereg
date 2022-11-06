@@ -1,7 +1,6 @@
 import os
 import json
-
-HOME = "http://127.0.0.1:5000" 
+from env import HOME
 
 def save_face(image_data):
     verify_or_create_folders()
@@ -14,7 +13,7 @@ def save_face(image_data):
     image_dict = {
         "face_id": img_id,
         "person_name" : img_name,
-        "headshot" : "static\\saved\\"+img_name+".png"
+        "headshot" : "static\\saved\\"+str(img_id)+".png"
     }
     # Save this to data.json
     with open("static\\saved\\data.json", "r") as f:

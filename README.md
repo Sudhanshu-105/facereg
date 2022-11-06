@@ -1,21 +1,30 @@
-## Face Recognition and Registration App  
-this application does not label faces yet.  
-Backend - Flask  
-FrontEnd - HTML + Bootstrap , Javascript
+# Face Registration Application
 
-### How to run  
-Clone the repo in local environment  
-cd into the backend folder  
-install the necessary packages. Run this in cmd/terminal  
-```
-pip install flask opencv-python pillow
+## Installation Instruction
+
+Upon Extracting the folder to a suitable place, open command line and navigate to the directory where facereg is extracted.
+It will contain 2 directories : backend and frontend. 
+
+in The command line , enter the following commands
+
 ```
 
-Now run the flask server
-```
+cd backend
+
+pip install -r requirements.txt
+
 python app.py
+
+
 ```
 
-Now , HTML Files will be sending request to 127.0.0.1, and server will be listening on 127.0.0.1.
+After the Flask Server is running, Leave the terminal as it is.  
 
-facereg.bsdesign can be opened in Bootstrap Studio to utilize the drag and drop UI Building, this will however erase all the javascript code.
+Go to the frontend directory, and open index.html in any browser. It is configured to send requests to that flask server that is running.
+
+
+## Deployment Instruction
+
+Front end can be deployed anywhere, it is independent from backend and does not have any dependency.
+
+To Deploy Backend on internet, minor changes are needed. The Server's IP has to be entered in env.py file's HOME variable.
